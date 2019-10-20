@@ -19,14 +19,14 @@ class Owner
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $familyName;
+    private $lastname;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -42,6 +42,17 @@ class Owner
      * @ORM\OneToMany(targetEntity="App\Entity\Room", mappedBy="owner", orphanRemoval=true)
      */
     private $rooms;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $telephone;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="owner", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
 
     public function __construct()
     {
@@ -65,14 +76,14 @@ class Owner
         return $this;
     }
 
-    public function getFamilyName(): ?string
+    public function getLastname(): ?string
     {
-        return $this->familyName;
+        return $this->lastname;
     }
 
-    public function setFamilyName(string $familyName): self
+    public function setLastname(string $lastname): self
     {
-        $this->familyName = $familyName;
+        $this->lastname = $lastname;
 
         return $this;
     }
@@ -128,6 +139,30 @@ class Owner
                 $room->setOwner(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(string $telephone): self
+    {
+        $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
