@@ -9,7 +9,16 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RegionRepository")
- * @ApiResource
+*  @ApiResource(
+ *     collectionOperations={
+ *         "get",
+ *         "post"={"security"="is_granted('ROLE_ADMIN')"}
+ *     },
+ *     itemOperations={
+ *         "get",
+ *         "put"={"security"="is_granted('ROLE_ADMIN')"},
+ *     }
+ * )
  */
 class Region
 {
@@ -36,7 +45,7 @@ class Region
     private $country;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Room", mappedBy="region")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Room", mappedBy="regions")
      * @ORM\JoinColumn(nullable=true)
      */
     private $rooms;

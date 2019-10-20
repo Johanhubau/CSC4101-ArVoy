@@ -31,6 +31,7 @@ class UserFixtures extends Fixture
         ));
         $superadmin->setEmail("test@example.com");
         $superadmin->setRoles([ "ROLE_SUPERADMIN" ]);
+        $superadmin->setStaff($superadmin_staff);
 
         $manager->flush();
     }

@@ -25,6 +25,8 @@ security:
 
     role_hierarchy:
         ROLE_USER: ROLE_USER
+        ROLE_CLIENT: [ROLE_USER]
+        ROLE_OWNER: [ROLE_USER]
         ROLE_MODERATOR: [ROLE_USER]
         ROLE_ADMIN: [ROLE_MODERATOR]
         ROLE_SUPERADMIN: [ROLE_ADMIN]

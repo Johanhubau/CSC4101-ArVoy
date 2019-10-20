@@ -41,6 +41,7 @@ class AppFixtures extends Fixture
         $owner->setCountry("FR");
         $owner->setUser($this->getReference(self::SUPER_ADMIN_REFERENCE));
         $owner->setTelephone("0033606060606");
+        $owner->setValidated(false);
         $manager->persist($owner);
 
         $manager->flush();
