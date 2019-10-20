@@ -41,17 +41,20 @@ class User implements UserInterface
     private $emailVerified;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Owner", mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Owner", mappedBy="user",  cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
      */
     private $owner;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Staff", mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Staff", mappedBy="user",  cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
      */
     private $staff;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Client", mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
      */
     private $client;
 

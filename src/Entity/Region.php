@@ -37,6 +37,7 @@ class Region
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Room", mappedBy="region")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $rooms;
 

@@ -42,6 +42,7 @@ class Owner
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Room", mappedBy="owner", orphanRemoval=true)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $rooms;
 
@@ -49,6 +50,11 @@ class Owner
      * @ORM\Column(type="string", length=255)
      */
     private $telephone;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $validated;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="owner", cascade={"persist", "remove"})
@@ -153,6 +159,18 @@ class Owner
     public function setTelephone(string $telephone): self
     {
         $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    public function getValidated(): ?bool
+    {
+        return $this->validated;
+    }
+
+    public function setValidated(bool $validated): self
+    {
+        $this->validated = $validated;
 
         return $this;
     }

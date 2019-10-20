@@ -63,11 +63,13 @@ class Room
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\UnavailablePeriod", mappedBy="room", orphanRemoval=true)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $unavailablePeriods;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Reservation", mappedBy="room", orphanRemoval=true)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $reservations;
 

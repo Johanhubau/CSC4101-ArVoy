@@ -58,7 +58,8 @@ class Reservation
     private $message;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="reservation", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="reservation",orphanRemoval=true)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $comments;
 

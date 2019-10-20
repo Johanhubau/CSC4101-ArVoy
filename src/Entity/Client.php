@@ -57,6 +57,7 @@ class Client
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Reservation", mappedBy="client", orphanRemoval=true)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $reservations;
 
