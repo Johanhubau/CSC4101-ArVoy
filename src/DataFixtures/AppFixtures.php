@@ -8,12 +8,20 @@ use App\Entity\Room;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
     public const IDF_REGION_REFERENCE = 'idf-region';
 
-    public const SUPER_ADMIN_REFERENCE = 'superadmin-user';
+    public const CLIENT_REFERENCE = 'client-user';
+
+    private $passwordEncoder;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
 
     public function load(ObjectManager $manager)
     {
@@ -27,22 +35,28 @@ class AppFixtures extends Fixture
 
         $this->addReference(self::IDF_REGION_REFERENCE, $region);
 
-        $superadmin = new User();
-        $superadmin->setPassword('$argon2id$v=19$m=65536,t=4,p=1$VW9WY1cvSGFSSWtxSmwwWg$fFSsKfVTRvoFtw9zZQKE4bgetIc3/1I31t8S0YvuK7o');
-        $superadmin->setEmail("test@example.com");
-        $superadmin->setRoles([ "ROLE_SUPERADMIN" ]);
+        $user = new User();
+        $user->setPassword($this->passwordEncoder->encodePassword(
+            $user,
+            'test'
+        ));
+        $user->setEmail("test@example.com");
+        $user->setRoles([ "ROLE_CLIENT", "ROLE_USER" ]);
+        $manager->persist($user);
 
-        $this->addReference(self::SUPER_ADMIN_REFERENCE, $superadmin);
+        $this->addReference(self::CLIENT_REFERENCE, $user);
 
         $owner = new Owner();
         $owner->setFirstname("Patrick");
         $owner->setLastname("Martin");
         $owner->setAddress("1 rue de l'Église");
         $owner->setCountry("FR");
-        $owner->setUser($this->getReference(self::SUPER_ADMIN_REFERENCE));
+        $owner->setUser($this->getReference(self::CLIENT_REFERENCE));
         $owner->setTelephone("0033606060606");
         $owner->setValidated(false);
         $manager->persist($owner);
+
+        $user->setOwner($owner);
 
         $manager->flush();
 

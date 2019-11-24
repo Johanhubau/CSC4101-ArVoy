@@ -24,14 +24,17 @@ class UserFixtures extends Fixture
         $superadmin_staff->setLastname("Martin");
         $superadmin_staff->setTitle("CEO");
 
+        $manager->flush();
+
         $superadmin = new User();
         $superadmin->setPassword($this->passwordEncoder->encodePassword(
             $superadmin,
-            'tototo'
+            'admin'
         ));
-        $superadmin->setEmail("test@example.com");
-        $superadmin->setRoles([ "ROLE_SUPERADMIN" ]);
+        $superadmin->setEmail("admin@example.com");
+        $superadmin->setRoles([ "ROLE_SUPERADMIN", "ROLE_ADMIN", "ROLE_MODERATOR", "ROLE_CLIENT", "ROLE_USER" ]);
         $superadmin->setStaff($superadmin_staff);
+        $superadmin_staff->setUser($superadmin);
 
         $manager->flush();
     }

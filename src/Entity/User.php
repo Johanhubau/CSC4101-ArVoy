@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use PhpParser\Node\Scalar\String_;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -197,5 +198,23 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    public function getDisplayName(): String
+    {
+        $displayName = "";
+        if ($this->getClient()) {
+            $displayName = $this->getClient()->getFirstname() . " " . $this->getClient()->getLastname();
+        }
+        else if ($this->getOwner()) {
+            $displayName = $this->getOwner()->getFirstname() . " " . $this->getOwner()->getLastname();
+        }
+        else if ($this->getStaff()) {
+            $displayName = $this->getStaff()->getFirstname() . " " . $this->getStaff()->getLastname();
+        } else {
+            $displayName = "Inconnu";
+        }
+
+        return $displayName;
     }
 }

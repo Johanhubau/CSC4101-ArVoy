@@ -15,13 +15,18 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            pattern: ^/
             anonymous: true
-
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+            provider: app_user_provider
+            json_login:
+                check_path: login_check
+                username_path: username
+                password_path: password
+            guard:
+                authenticators:
+                    - App\Controller\SecurityController
+            logout:
+                path: login_logout
 
     role_hierarchy:
         ROLE_USER: ROLE_USER
