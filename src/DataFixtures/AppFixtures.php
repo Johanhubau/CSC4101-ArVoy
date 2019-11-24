@@ -13,6 +13,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class AppFixtures extends Fixture
 {
     public const IDF_REGION_REFERENCE = 'idf-region';
+    public const GDE_REGION_REFERENCE = 'gde-region';
 
     public const CLIENT_REFERENCE = 'client-user';
 
@@ -25,15 +26,21 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $region = new Region();
-        $region->setCountry("FR");
-        $region->setName("Ile de France");
-        $region->setPresentation("La région française capitale");
-        $manager->persist($region);
+        $idf = new Region();
+        $idf->setCountry("FR");
+        $idf->setName("Ile de France");
+        $idf->setPresentation("La région française capitale");
+        $manager->persist($idf);
+        $this->addReference(self::IDF_REGION_REFERENCE, $idf);
+
+        $gde = new Region();
+        $gde->setCountry("FR");
+        $gde->setName("Grand-Est");
+        $gde->setPresentation("La région française qu'elle est à l'Est");
+        $manager->persist($gde);
+        $this->addReference(self::GDE_REGION_REFERENCE, $gde);
 
         $manager->flush();
-
-        $this->addReference(self::IDF_REGION_REFERENCE, $region);
 
         $user = new User();
         $user->setPassword($this->passwordEncoder->encodePassword(
@@ -71,6 +78,27 @@ class AppFixtures extends Fixture
 
         $manager->persist($room);
 
+        $room1 = new Room();
+        $room1->setSummary("Superbe étable");
+        $room1->setDescription("Franchement nickel, il y a même des chevaux");
+        $room1->addRegion($this->getReference(self::IDF_REGION_REFERENCE));
+        $room1->setCapacity(1);
+        $room1->setSuperficy(12);
+        $room1->setPrice(865);
+        $room1->setOwner($owner);
+
+        $manager->persist($room1);
+
+        $room2 = new Room();
+        $room2->setSummary("Chez Roger");
+        $room2->setDescription("Un peu perdu");
+        $room2->addRegion($this->getReference(self::GDE_REGION_REFERENCE));
+        $room2->setCapacity(2);
+        $room2->setSuperficy(34);
+        $room2->setPrice(154);
+        $room2->setOwner($owner);
+
+        $manager->persist($room2);
         $manager->flush();
     }
 }

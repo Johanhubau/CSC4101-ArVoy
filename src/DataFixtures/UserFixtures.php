@@ -20,8 +20,8 @@ class UserFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $superadmin_staff = new Staff();
-        $superadmin_staff->setFirstname("Patrick");
-        $superadmin_staff->setLastname("Martin");
+        $superadmin_staff->setFirstname("Admin");
+        $superadmin_staff->setLastname("Admin");
         $superadmin_staff->setTitle("CEO");
 
         $manager->flush();
@@ -36,6 +36,8 @@ class UserFixtures extends Fixture
         $superadmin->setStaff($superadmin_staff);
         $superadmin_staff->setUser($superadmin);
 
+        $manager->persist($superadmin_staff);
+        $manager->persist($superadmin);
         $manager->flush();
     }
 }
