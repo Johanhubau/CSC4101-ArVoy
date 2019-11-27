@@ -240,16 +240,17 @@ class User implements UserInterface
             $info = $this->getOwner();
         }
 
-        $infoarr += array(
-            "firstname" => $info->getFirstname(),
-            "lastname" => $info->getLastname(),
-            "address" => $info->getAddress(),
-            "telephone" => $info->getTelephone(),
-            "email" => $this->getEmail(),
-            "country" => $info->getCountry(),
-            "birthdate" => $info->getBirthdate()->format('d/m/Y')
-        );
-
+        if ($info != null) {
+            $infoarr += array(
+                "firstname" => $info->getFirstname(),
+                "lastname" => $info->getLastname(),
+                "address" => $info->getAddress(),
+                "telephone" => $info->getTelephone(),
+                "email" => $this->getEmail(),
+                "country" => $info->getCountry(),
+                "birthdate" => $info->getBirthdate()->format('d/m/Y')
+            );
+        }
         return $infoarr;
     }
 }
