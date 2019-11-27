@@ -9,7 +9,17 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ClientRepository")
- * @ApiResource
+ *  @ApiResource(
+ *     collectionOperations={
+ *         "get"={"security"="is_granted('ROLE_MODERATOR')"},
+ *         "post"={"security"="is_granted('ROLE_MODERATOR') or object.getUser() == user"}
+ *     },
+ *     itemOperations={
+ *         "get",
+ *         "put"={"security"="is_granted('ROLE_MODERATOR') or object.getUser() == user"},
+ *         "delete"={"security"="is_granted('ROLE_MODERATOR') or object.getUser() == user"}
+ *     }
+ * )
  */
 class Client
 {

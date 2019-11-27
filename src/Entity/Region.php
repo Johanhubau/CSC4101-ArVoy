@@ -2,23 +2,28 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RegionRepository")
 *  @ApiResource(
  *     collectionOperations={
- *         "get",
- *         "post"={"security"="is_granted('ROLE_ADMIN')"}
+ *         "get"={"method"="GET", "normalization_context"={"groups"={"read"}}},
+ *         "post"={"security"="is_granted('ROLE_MODERATOR')"},
  *     },
  *     itemOperations={
- *         "get",
- *         "put"={"security"="is_granted('ROLE_ADMIN')"},
+ *         "get"={"method"="GET", "normalization_context"={"groups"={"read"}}},
+ *         "put"={"security"="is_granted('ROLE_MODERATOR')"},
+ *         "delete"={"security"="is_granted('ROLE_MODERATOR')"}
  *     }
  * )
+ * * @ApiFilter(SearchFilter::class, properties={"country": "exact", "name": "partial", "presentation": "partial", "rooms": "exact"})
  */
 class Region
 {
@@ -26,21 +31,25 @@ class Region
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"read"})
      */
     private $presentation;
 
     /**
      * @ORM\Column(type="string", length=2, nullable=true)
+     * @Groups({"read"})
      */
     private $country;
 
@@ -49,6 +58,12 @@ class Region
      * @ORM\JoinColumn(nullable=true)
      */
     private $rooms;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Document", cascade={"persist", "remove"})
+     * @Groups({"read"})
+     */
+    private $image;
 
     public function __construct()
     {
@@ -120,6 +135,18 @@ class Region
             $this->rooms->removeElement($room);
             $room->removeRegion($this);
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?Document
+    {
+        return $this->image;
+    }
+
+    public function setImage(?Document $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

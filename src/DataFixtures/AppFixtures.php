@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Document;
 use App\Entity\Owner;
 use App\Entity\Region;
 use App\Entity\Room;
@@ -87,6 +88,12 @@ class AppFixtures extends Fixture
         $room1->setPrice(865);
         $room1->setOwner($owner);
 
+        $doc = new Document();
+        $doc->name = "logo";
+        $doc->path = "5ddd4aabc029d_logo.png";
+        $manager->persist($doc);
+        $room->setImage($doc);
+        $idf->setImage($doc);
         $manager->persist($room1);
 
         $room2 = new Room();

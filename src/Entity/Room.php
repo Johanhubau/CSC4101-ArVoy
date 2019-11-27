@@ -8,11 +8,24 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RoomRepository")
- * @ApiResource
- * @ApiFilter(SearchFilter::class, properties={"regions": "exact"})
+ *  @ApiResource(
+ *     collectionOperations={
+ *         "get"={"method"="GET", "normalization_context"={"groups"={"read"}}},
+ *         "post"={"security"="is_granted('ROLE_MODERATOR') or object.getOwner() == user.getOwner()"},
+ *     },
+ *     itemOperations={
+ *         "get"={"method"="GET", "normalization_context"={"groups"={"read"}}},
+ *         "put"={"security"="is_granted('ROLE_MODERATOR') or object.getOwner() == user.getOwner()"},
+ *         "delete"={"security"="is_granted('ROLE_MODERATOR') or object.getOwner() == user.getOwner()"}
+ *     }
+ * )
+ * @ApiFilter(SearchFilter::class, properties={"regions": "exact", "summary": "partial", "description": "partial"})
+ * @ApiFilter(RangeFilter::class, properties={"capacity", "superficy", "price"})
  */
 class Room
 {
@@ -20,47 +33,56 @@ class Room
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"read"})
      */
     private $summary;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"read"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
      */
     private $capacity;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
      */
     private $superficy;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
      */
     private $price;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"read"})
      */
     private $address;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Owner", inversedBy="rooms")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"read"})
      */
     private $owner;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Region", inversedBy="rooms")
+     * @Groups({"read"})
      */
     private $regions;
 
@@ -75,6 +97,12 @@ class Room
      * @ORM\JoinColumn(nullable=true)
      */
     private $reservations;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Document", cascade={"persist", "remove"})
+     * @Groups({"read"})
+     */
+    private $image;
 
     public function __construct()
     {
@@ -256,6 +284,18 @@ class Room
                 $reservation->setRoom(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?Document
+    {
+        return $this->image;
+    }
+
+    public function setImage(?Document $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

@@ -9,7 +9,17 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ApiResource
+ *  @ApiResource(
+ *     collectionOperations={
+ *         "get"={"security"="is_granted('ROLE_MODERATOR')"},
+ *         "post"={"security"="is_granted('ROLE_MODERATOR')"},
+ *     },
+ *     itemOperations={
+ *         "get"={"security"="object == user"},
+ *         "put"={"security"="is_granted('ROLE_MODERATOR') or object == user"},
+ *         "delete"={"security"="is_granted('ROLE_MODERATOR')"}
+ *     }
+ * )
  */
 class User implements UserInterface
 {
