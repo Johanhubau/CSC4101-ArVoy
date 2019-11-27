@@ -116,8 +116,8 @@ class FakerFixtures extends Fixture
             $period->setDescription($faker->text);
             $room = $rooms[array_rand($rooms)];
             $period->setRoom($room);
-            $period->setStart($faker->dateTimeThisYear());
-            $period->setUntil($faker->dateTimeThisYear($period->getStart()));
+            $period->setUntil($faker->dateTimeThisYear());
+            $period->setStart($faker->dateTimeThisYear($period->getUntil()));
             $room->addUnavailablePeriod($period);
             $manager->persist($period);
         }

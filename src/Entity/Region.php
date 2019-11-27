@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use App\Filter\StartUntilFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -27,8 +27,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * )
  * @ApiFilter(SearchFilter::class, properties={"country": "exact", "name": "partial", "presentation": "partial", "rooms": "exact"})
  * @ApiFilter(RangeFilter::class, properties={"rooms.capacity"})
- * @ApiFilter(DateFilter::class, properties={"rooms.reservations.start", "rooms.reservations.until",
- *     "rooms.unavailablePeriods.start", "rooms.unavailablePeriods.until"})
+ * @ApiFilter(StartUntilFilter::class, properties={"reservations.rooms", "unavailablePeriods.rooms"})
  */
 class Region
 {
