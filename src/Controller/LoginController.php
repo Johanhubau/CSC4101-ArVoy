@@ -42,7 +42,8 @@ final class LoginController extends AbstractController
                 "username" => $user->getUsername(),
                 "roles" => $user->getRoles(),
                 "email" => $user->getEmail(),
-                "displayName" => $user->getDisplayName()
+                "displayName" => $user->getDisplayName(),
+                "information" => $user->getInformation()
             );
         }
 

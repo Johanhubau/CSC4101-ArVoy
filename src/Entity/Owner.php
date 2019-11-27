@@ -72,6 +72,11 @@ class Owner
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $birthdate;
+
     public function __construct()
     {
         $this->rooms = new ArrayCollection();
@@ -193,6 +198,18 @@ class Owner
     public function setUser(User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getBirthdate(): ?\DateTimeInterface
+    {
+        return $this->birthdate;
+    }
+
+    public function setBirthdate(\DateTimeInterface $birthdate): self
+    {
+        $this->birthdate = $birthdate;
 
         return $this;
     }

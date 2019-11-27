@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -26,6 +27,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * )
  * @ApiFilter(SearchFilter::class, properties={"regions": "exact", "summary": "partial", "description": "partial"})
  * @ApiFilter(RangeFilter::class, properties={"capacity", "superficy", "price"})
+ * @ApiFilter(DateFilter::class, properties={"reservations.start", "reservations.until", "unavailablePeriods.start", "unavailablePeriods.until"})
  */
 class Room
 {
@@ -89,12 +91,14 @@ class Room
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\UnavailablePeriod", mappedBy="room", orphanRemoval=true)
      * @ORM\JoinColumn(nullable=true)
+     * @Groups({"read"})
      */
     private $unavailablePeriods;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Reservation", mappedBy="room", orphanRemoval=true)
      * @ORM\JoinColumn(nullable=true)
+     * @Groups({"read"})
      */
     private $reservations;
 

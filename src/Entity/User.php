@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Scalar\String_;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -226,5 +227,29 @@ class User implements UserInterface
         }
 
         return $displayName;
+    }
+
+    public function getInformation() : array
+    {
+        $infoarr = array();
+        $info = null;
+        if ($this->getClient()) {
+            $info = $this->getClient();
+        }
+        else if ($this->getOwner()) {
+            $info = $this->getOwner();
+        }
+
+        $infoarr += array(
+            "firstname" => $info->getFirstname(),
+            "lastname" => $info->getLastname(),
+            "address" => $info->getAddress(),
+            "telephone" => $info->getTelephone(),
+            "email" => $this->getEmail(),
+            "country" => $info->getCountry(),
+            "birthdate" => $info->getBirthdate()->format('d/m/Y')
+        );
+
+        return $infoarr;
     }
 }
