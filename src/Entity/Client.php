@@ -29,48 +29,56 @@ class Client
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Groups({"read"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Groups({"read"})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Regex("/^\d{10}$/")
+     * @Groups({"read"})
      */
     private $telephone;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank()
+     * @Groups({"read"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="date")
      * @Assert\Date()
+     * @Groups({"read"})
      */
     private $birthdate;
 
     /**
      * @ORM\Column(type="string", length=2, nullable=true)
      * @Assert\Country()
+     * @Groups({"read"})
      */
     private $country;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank()
+     * @Groups({"read"})
      */
     private $presentation;
 

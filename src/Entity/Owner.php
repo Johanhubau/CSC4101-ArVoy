@@ -35,24 +35,28 @@ class Owner
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Groups({"read"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Groups({"read"})
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Assert\NotBlank()
+     * @Groups({"read"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=2)
      * @Assert\Country()
+     * @Groups({"read"})
      */
     private $country;
 
@@ -65,11 +69,14 @@ class Owner
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Regex("/^\d{10}$/")
+     * @Groups({"read"})
      */
     private $telephone;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"read"})
+     * @Groups({"read"})
      */
     private $validated;
 
@@ -82,6 +89,7 @@ class Owner
     /**
      * @ORM\Column(type="datetime")
      * @Assert\DateTime()
+     * @Groups({"read"})
      */
     private $birthdate;
 
