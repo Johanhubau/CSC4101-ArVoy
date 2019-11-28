@@ -7,12 +7,24 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use http\Exception\InvalidArgumentException;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ReservationRepository")
  * @ApiResource
  * @ORM\HasLifecycleCallbacks()
+ *  @ApiResource(
+ *     collectionOperations={
+ *         "get",
+ *         "post"={"security"="is_granted('ROLE_CLIENT')"},
+ *     },
+ *     itemOperations={
+ *         "get",
+ *         "put"={"security"="is_granted('ROLE_MODERATOR') or object.getClient() == user.getClient()"},
+ *         "delete"={"security"="is_granted('ROLE_MODERATOR') or object.getClient() == user.getClient()"}
+ *     }
+ * )
  */
 class Reservation
 {

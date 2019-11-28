@@ -56,7 +56,7 @@ final class LoginController extends AbstractController
     }
 
     /**
-     * @Route("/login/logout", name="login_logout", methods={"GET"})
+     * @Route("/logout", name="login_logout", methods={"GET"})
      *
      * @throws \Exception
      */

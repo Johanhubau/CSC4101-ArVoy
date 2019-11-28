@@ -49,7 +49,7 @@ class FakerFixtures extends Fixture
             $owner->setUser($user);
             $owner->setBirthdate($faker->dateTime());
             $owner->setTelephone($faker->phoneNumber);
-            $owner->setValidated(false);
+            $owner->setValidated(rand(1,2) == 1 ? true : false);
             $user->setOwner($owner);
             $manager->persist($owner);
             $owners[] = $owner;
