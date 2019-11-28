@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OwnerRepository")
@@ -32,21 +33,25 @@ class Owner
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank()
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=2)
+     * @Assert\Country()
      */
     private $country;
 
@@ -58,6 +63,7 @@ class Owner
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Regex("/^\d{10}$/")
      */
     private $telephone;
 
@@ -74,6 +80,7 @@ class Owner
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\DateTime()
      */
     private $birthdate;
 

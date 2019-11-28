@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Scalar\String_;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -33,6 +34,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\Email()
      */
     private $email;
 
@@ -44,6 +46,7 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotCompromisedPassword()
      */
     private $password;
 
@@ -242,6 +245,9 @@ class User implements UserInterface
 
         if ($info != null) {
             $infoarr += array(
+                "client_id" => $this->getClient() != null ? $this->getClient()->getId() : null,
+                "owner_id" => $this->getOwner() != null ? $this->getOwner()->getId() : null,
+                "staff_id" => $this->getStaff() != null ? $this->getStaff()->getId() : null,
                 "firstname" => $info->getFirstname(),
                 "lastname" => $info->getLastname(),
                 "address" => $info->getAddress(),

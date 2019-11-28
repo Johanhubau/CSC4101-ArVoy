@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UnavailablePeriodRepository")
@@ -20,11 +21,13 @@ class UnavailablePeriod
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\DateTime()
      */
     private $start;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\DateTime()
      */
     private $until;
 
@@ -36,6 +39,7 @@ class UnavailablePeriod
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
      */
     private $description;
 

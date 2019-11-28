@@ -11,6 +11,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use App\Filter\StartUntilFilter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RoomRepository")
@@ -42,36 +43,42 @@ class Room
     /**
      * @ORM\Column(type="text")
      * @Groups({"read"})
+     * @Assert\NotBlank()
      */
     private $summary;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Groups({"read"})
+     * @Assert\NotBlank()
      */
     private $description;
 
     /**
      * @ORM\Column(type="integer")
      * @Groups({"read"})
+     * @Assert\Range(min=1,max=5)
      */
     private $capacity;
 
     /**
      * @ORM\Column(type="integer")
      * @Groups({"read"})
+     * @Assert\Positive()
      */
     private $superficy;
 
     /**
      * @ORM\Column(type="integer")
      * @Groups({"read"})
+     * @Assert\Positive()
      */
     private $price;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Groups({"read"})
+     * @Assert\NotBlank()
      */
     private $address;
 

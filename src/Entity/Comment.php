@@ -4,10 +4,21 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
- * @ApiResource
+ *  @ApiResource(
+ *     collectionOperations={
+ *         "get",
+ *         "post"={"security"="is_granted('ROLE_MODERATOR') or object.getReservation().getClient().getUser() == user"},
+ *     },
+ *     itemOperations={
+ *         "get",
+ *         "put"={"security"="is_granted('ROLE_MODERATOR') or object.getReservation().getClient().getUser() == user"},
+ *         "delete"={"security"="is_granted('ROLE_MODERATOR') or object.getReservation().getClient().getUser() == user"},
+ *     }
+ * )
  */
 class Comment
 {
@@ -26,16 +37,20 @@ class Comment
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(max=255)
      */
     private $comment;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\DateTime()
      */
     private $date;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Range(min=1,max=5)
      */
     private $rating;
 

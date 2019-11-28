@@ -11,6 +11,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use App\Filter\StartUntilFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RegionRepository")
@@ -42,18 +43,21 @@ class Region
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"read"})
+     * @Assert\NotBlank()
      */
     private $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Groups({"read"})
+     * @Assert\NotBlank()
      */
     private $presentation;
 
     /**
      * @ORM\Column(type="string", length=2, nullable=true)
      * @Groups({"read"})
+     * @Assert\Country()
      */
     private $country;
 

@@ -6,10 +6,13 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use http\Exception\InvalidArgumentException;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ReservationRepository")
  * @ApiResource
+ * @ORM\HasLifecycleCallbacks()
  */
 class Reservation
 {
@@ -39,11 +42,13 @@ class Reservation
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\DateTime()
      */
     private $start;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\Date()
      */
     private $until;
 
@@ -54,6 +59,7 @@ class Reservation
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max=255)
      */
     private $message;
 
@@ -67,6 +73,33 @@ class Reservation
     {
         $this->occupants = new ArrayCollection();
         $this->comments = new ArrayCollection();
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function checkIfFree()
+    {
+        $free = true;
+        foreach ($this->room->getReservations() as $reservation) {
+            if (!($this->until <= $reservation->start || $this->start >= $reservation->until)) {
+                $free = false;
+                break;
+            }
+        }
+
+        if ($free) {
+            foreach ($this->room->getUnavailablePeriods() as $period) {
+                if (!($this->until <= $reservation->start || $this->start >= $reservation->until)) {
+                    $free = false;
+                    break;
+                }
+            }
+        }
+
+        if (!$free) {
+            throw new \ApiPlatform\Core\Exception\InvalidArgumentException("The room is not available during this period");
+        }
     }
 
     public function getId(): ?int

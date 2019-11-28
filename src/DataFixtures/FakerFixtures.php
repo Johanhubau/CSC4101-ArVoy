@@ -3,10 +3,12 @@
 namespace App\DataFixtures;
 
 use App\Entity\Client;
+use App\Entity\Comment;
 use App\Entity\Document;
 use App\Entity\Owner;
 use App\Entity\Personne;
 use App\Entity\Region;
+use App\Entity\Reservation;
 use App\Entity\Room;
 use App\Entity\UnavailablePeriod;
 use App\Entity\User;
@@ -26,7 +28,7 @@ class FakerFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $faker = Faker\Factory::create('fr_FR');
+        $faker = Faker\Factory::create('en_EN');
 
         $owners = [];
         for ($i = 0; $i < 10; $i++) {
@@ -35,7 +37,7 @@ class FakerFixtures extends Fixture
                 $user,
                 "tototo"
             ));
-            $user->setEmail($faker->email);
+            $user->setEmail($faker->unique()->email);
             $user->setRoles([ "ROLE_CLIENT", "ROLE_USER" ]);
             $manager->persist($user);
 
@@ -94,7 +96,7 @@ class FakerFixtures extends Fixture
                 $user,
                 "tototo"
             ));
-            $user->setEmail($faker->email);
+            $user->setEmail($faker->unique()->email);
             $user->setRoles([ "ROLE_CLIENT", "ROLE_USER" ]);
             $manager->persist($user);
 
@@ -121,6 +123,49 @@ class FakerFixtures extends Fixture
             $room->addUnavailablePeriod($period);
             $manager->persist($period);
         }
+
+
+        $occupants = [];
+        for ($i = 0; $i < 20; $i++) {
+            $client = new Client();
+            $client->setFirstname($faker->firstName);
+            $client->setLastname($faker->lastName);
+            $client->setAddress($faker->streetAddress);
+            $client->setBirthdate($faker->dateTime());
+            $client->setCountry("FR");
+            $client->setTelephone($faker->phoneNumber);
+            $manager->persist($client);
+            $occupants[] = $client;
+        }
+
+        for ($i = 0; $i < 10; $i++) {
+            $client = $clients[array_rand($clients)];
+            $room = $rooms[array_rand($rooms)];
+            $reservation = new Reservation();
+            $reservation->setClient($client);
+            $reservation->setUntil($faker->dateTimeThisYear);
+            $reservation->setStart($faker->dateTime($reservation->getUntil()));
+            $reservation->setMessage($faker->sentence);
+            $reservation->setValidated(rand(1,2) == 1);
+
+            $reservation->setRoom($room);
+            for ($j = 0; $j < rand(1, $room->getCapacity()); $j++) {
+                $reservation->addOccupant($occupants[array_rand($occupants)]);
+            }
+
+            if (rand(1,2) == 1 && $reservation->getValidated()) {
+                $comment = new Comment();
+                $comment->setReservation($reservation);
+                $comment->setComment(join("\n", $faker->sentences));
+                $comment->setDate($faker->dateTimeBetween($reservation->getUntil()));
+                $comment->setRating(rand(1, 5));
+                $comment->setAccepted(rand(1,2) == 1);
+                $manager->persist($comment);
+                $reservation->addComment($comment);
+            }
+            $manager->persist($reservation);
+        }
+
         $manager->flush();
     }
 }
