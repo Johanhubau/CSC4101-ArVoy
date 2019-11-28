@@ -29,7 +29,7 @@ class Client
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     *
+     * @Groups({"read"})
      */
     private $id;
 
@@ -91,6 +91,7 @@ class Client
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="client", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=true)
+     * @Groups({"read"})
      */
     private $user;
 

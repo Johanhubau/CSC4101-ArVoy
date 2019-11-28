@@ -53,7 +53,7 @@ class FakerFixtures extends Fixture
             $owner->setValidated(rand(1,2) == 1 ? true : false);
 
             $document = new Document();
-            $document->path = $faker->imageUrl(400, 200, 'cats');
+            $document->path = $faker->imageUrl(300, 300, 'cats');
             $document->name = $faker->md5;
             $owner->setImage($document);
             $manager->persist($document);
