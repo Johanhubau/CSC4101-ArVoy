@@ -59,6 +59,12 @@ class Comment
      */
     private $accepted;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Room", inversedBy="comments")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $room;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -120,6 +126,18 @@ class Comment
     public function setAccepted(bool $accepted): self
     {
         $this->accepted = $accepted;
+
+        return $this;
+    }
+
+    public function getRoom(): ?Room
+    {
+        return $this->room;
+    }
+
+    public function setRoom(?Room $room): self
+    {
+        $this->room = $room;
 
         return $this;
     }

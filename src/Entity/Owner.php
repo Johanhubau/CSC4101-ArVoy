@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -16,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         "post"={"security"="is_granted('ROLE_MODERATOR') or object.getUser() == user"},
  *     },
  *     itemOperations={
- *         "get",
+ *         "get"={"method"="GET", "normalization_context"={"groups"={"read"}}},
  *         "put"={"security"="is_granted('ROLE_MODERATOR') or object.getUser() == user"},
  *         "delete"={"security"="is_granted('ROLE_MODERATOR') or object.getUser() == user"}
  *     }
@@ -83,6 +84,12 @@ class Owner
      * @Assert\DateTime()
      */
     private $birthdate;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Document")
+     * @Groups({"read"})
+     */
+    private $image;
 
     public function __construct()
     {
@@ -217,6 +224,18 @@ class Owner
     public function setBirthdate(\DateTimeInterface $birthdate): self
     {
         $this->birthdate = $birthdate;
+
+        return $this;
+    }
+
+    public function getImage(): ?Document
+    {
+        return $this->image;
+    }
+
+    public function setImage(?Document $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

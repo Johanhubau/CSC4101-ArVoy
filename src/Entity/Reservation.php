@@ -102,7 +102,7 @@ class Reservation
 
         if ($free) {
             foreach ($this->room->getUnavailablePeriods() as $period) {
-                if (!($this->until <= $reservation->start || $this->start >= $reservation->until)) {
+                if (!($this->until <= $period->getStart() || $this->start >= $period->getUntil())) {
                     $free = false;
                     break;
                 }
