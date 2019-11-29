@@ -107,9 +107,10 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        if (!in_array("ROLE_USER", $roles)) $roles[] = 'ROLE_USER';
+        if ($this->client != null && !in_array("ROLE_CLIENT", $roles)) $roles[] = "ROLE_CLIENT";
 
-        return array_unique($roles);
+        return $roles;
     }
 
     public function setRoles(array $roles): self
@@ -210,6 +211,7 @@ class User implements UserInterface
         if ($this !== $client->getUser()) {
             $client->setUser($this);
         }
+        $this->setRoles($this->roles + ["ROLE_CLIENT"]);
 
         return $this;
     }
@@ -245,6 +247,7 @@ class User implements UserInterface
 
         if ($info != null) {
             $infoarr += array(
+                "user_id" => $this->getId(),
                 "client_id" => $this->getClient() != null ? $this->getClient()->getId() : null,
                 "owner_id" => $this->getOwner() != null ? $this->getOwner()->getId() : null,
                 "staff_id" => $this->getStaff() != null ? $this->getStaff()->getId() : null,

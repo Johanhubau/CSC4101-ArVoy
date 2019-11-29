@@ -153,7 +153,7 @@ class FakerFixtures extends Fixture
             $occupants[] = $client;
         }
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 40; $i++) {
             try {
                 $client = $clients[array_rand($clients)];
                 $room = $rooms[array_rand($rooms)];
@@ -171,16 +171,18 @@ class FakerFixtures extends Fixture
 
                 $manager->persist($reservation);
 
-                if (rand(1, 2) == 1 && $reservation->getValidated()) {
-                    $comment = new Comment();
-                    $comment->setReservation($reservation);
-                    $comment->setComment(join("\n", $faker->sentences));
-                    $comment->setDate($faker->dateTimeBetween($reservation->getUntil()));
-                    $comment->setRating(rand(1, 5));
-                    $comment->setAccepted(rand(1, 2) == 1);
-                    $room->addComment($comment);
-                    $manager->persist($comment);
-                    $reservation->addComment($comment);
+                if ($reservation->getValidated()) {
+                    for ($k = 0; $k < 3; $k++) {
+                        $comment = new Comment();
+                        $comment->setReservation($reservation);
+                        $comment->setComment(join("\n", $faker->sentences));
+                        $comment->setDate($faker->dateTimeBetween($reservation->getUntil()));
+                        $comment->setRating(rand(1, 5));
+                        $comment->setAccepted(rand(1, 2) == 1);
+                        $room->addComment($comment);
+                        $manager->persist($comment);
+                        $reservation->addComment($comment);
+                    }
                 }
                 $manager->persist($reservation);
             } catch (Exception $e) {}

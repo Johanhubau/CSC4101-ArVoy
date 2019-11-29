@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *  @ApiResource(
  *     collectionOperations={
  *         "get"={"security"="is_granted('ROLE_MODERATOR')"},
- *         "post"={"security"="is_granted('ROLE_MODERATOR') or object.getUser() == user"}
+ *         "post"={"security"="is_granted('ROLE_USER')"}
  *     },
  *     itemOperations={
  *         "get"={"method"="GET", "normalization_context"={"groups"={"read"}}},
@@ -77,7 +77,6 @@ class Client
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\NotBlank()
      * @Groups({"read"})
      */
     private $presentation;
@@ -235,6 +234,8 @@ class Client
     {
         $this->user = $user;
 
+        // set the owning side of the relation if necessary
+        $user->setClient($this);
         return $this;
     }
 
